@@ -10,37 +10,20 @@
       "prefix": "",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/ng-canvas-gauges/tsconfig.lib.json",
             "project": "projects/ng-canvas-gauges/ng-package.json"
           },
           "configurations": {
             "production": {
               "tsConfig": "projects/ng-canvas-gauges/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ng-canvas-gauges/tsconfig.lib.json"
             }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ng-canvas-gauges/src/test.ts",
-            "tsConfig": "projects/ng-canvas-gauges/tsconfig.spec.json",
-            "karmaConfig": "projects/ng-canvas-gauges/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ng-canvas-gauges/tsconfig.lib.json",
-              "projects/ng-canvas-gauges/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
+          },
+          "defaultConfiguration": "production"
+
       }
     },
     "demo": {

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { GaugesModule } from 'ng-canvas-gauges';
+import { GaugesModule } from '@biacsics/ng-canvas-gauges';
 import { AppComponent } from './app.component';
 import { CompassComponent } from './compass/compass.component';
 import { FuelgaugeComponent } from './fuelgauge/fuelgauge.component';
