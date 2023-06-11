@@ -4,6 +4,7 @@ jspm_packages
 .idea
 build
 *.log
+.angular
 
 # compiled output
 /dist

@@ -1,6 +1,6 @@
 {
   "name": "@biacsics/ng-canvas-gauges",
-  "version": "6.0.8",
+  "version": "6.0.14",
   "description": "Angular 15+ component wrapper for the canvas-gauges lib written by @Mikhus",
   "repository": {
     "type": "git",
@@ -9,8 +9,10 @@
   "keywords": [
     "Angular",
     "Canvas",
-    "Gauges", "Thermometer",
-    "Meter", "Speedometer"
+    "Gauges",
+    "Thermometer",
+    "Meter",
+    "Speedometer"
   ],
   "author": "markus.biacsics@gmail.com",
   "contributors": [
@@ -25,7 +27,7 @@
   "peerDependencies": {
     "@angular/common": ">=9.0.0",
     "@angular/core": ">=9.0.0",
-    "@types/canvas-gauges": "^2.1.2",
+    "@types/canvas-gauges": "^2.1.4",
     "canvas-gauges": "^2.1.7",
     "rx-dom-html": "^7.0.3"
   },

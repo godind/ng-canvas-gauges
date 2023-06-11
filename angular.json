@@ -23,7 +23,27 @@
             }
           },
           "defaultConfiguration": "production"
-
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng-canvas-gauges/src/test.ts",
+            "tsConfig": "projects/ng-canvas-gauges/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-canvas-gauges/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng-canvas-gauges/tsconfig.lib.json",
+              "projects/ng-canvas-gauges/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
       }
     },
     "demo": {

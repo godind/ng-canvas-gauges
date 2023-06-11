@@ -1,10 +1,10 @@
 {
   "name": "@biacsics/ng-canvas-gauges",
-  "version": "6.0.8",
+  "version": "6.0.14",
   "description": "Angular 15+ component wrapper for the canvas-gauges lib written by @Mikhus",
   "scripts": {
     "build:example": "ng build example",
-    "build:lib": "ng build ng-canvas-gauges --prod",
+    "build:lib": "ng build ng-canvas-gauges --configuration production",
     "prebuild:lib": "npm run clean",
     "postbuild:lib": "cp -f ./LICENSE  ./README.md ./gauges.png ./gauges.gif ./dist/ng-canvas-gauges",
     "build:pack": "cd dist/ng-canvas-gauges && npm pack",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/biacsics/ng-canvas-gauges.git"
+    "url": "https://github.com/biacsics/ng-canvas-gauges.git"
   },
   "keywords": [
     "Angular",
