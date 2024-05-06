@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { ViewChild, Input, NgZone, ElementRef, OnInit, AfterViewInit, Directive } from '@angular/core';
+import { ViewChild, Input, NgZone, ElementRef, OnInit, AfterViewInit, Directive, OnDestroy } from '@angular/core';
 import * as CanvasGauges from 'canvas-gauges';
 import * as Rx from 'rx-dom-html';
 
@@ -45,7 +45,7 @@ const attributeName2PropertyName = (attrName: string) => toCamelCase(attrName);
  */
 @Directive()
 export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends CanvasGauges.GenericOptions>
-    implements OnInit, AfterViewInit {
+    implements OnInit, AfterViewInit, OnDestroy {
 
     /**
      * Canvas element on the template used by the library to draw gauge element
@@ -86,7 +86,7 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
     /**
      *
      * @param el - reference to the element of the whole component, used to scrape options declared on the component itself
-     * @param zone - required to redraw gauge outside of Angular, due to animation lags caused by the ovewritten function of the ngZone
+     * @param zone - required to redraw gauge outside of Angular, due to animation lags caused by the overwritten function of the ngZone
      */
     constructor(private el: ElementRef, public zone: NgZone) {
     }
@@ -110,13 +110,13 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
         options.renderTo = this.canvas.nativeElement;
 
         // Map attribute-based options onto options.
-        // Requries converting kebab style attribute names to camelCase property names
+        // Requires converting kebab style attribute names to camelCase property names
         for (const attr of this.el.nativeElement.attributes) {
             const prop = attributeName2PropertyName(attr.name);
             options[prop] = CanvasGauges.DomObserver.parse(attr.value);
         }
 
-        // merge preOptons with attribute-based properties
+        // merge preOptions with attribute-based properties
         // tslint:disable-next-line:forin
         for (const prop in this.preInitOptions) {
             options[prop] = this.preInitOptions[prop];
@@ -179,7 +179,7 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
      *
      * @param newOptions  - the options to update the gauge
      */
-    public update(newOptions: T2 | {}) {
+    public update(newOptions: T2 | {}): void {
 
         // map all options onto this element's attributes
         // Then attribute changes will be detected and pushed to the gauge.update()
@@ -200,6 +200,33 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
         }
     }
 
+
+    /**
+     * Perform cleanup here and provide a hook for subclasses to do their cleanup.
+     */
+    public ngOnDestroy() {
+        this.destroy();
+
+        // Call subclass cleanup
+        this.cleanup();
+    }
+
+    /**
+     * Subclasses should override this method to do their cleanup.
+     * Don't forget to call super.cleanup() if you override this method.
+     */
+    protected cleanup(): void {
+        // Subclass-specific cleanup goes here
+    }
+
+
+    /**
+     * Stops listening for DOMEvents and performs destruction of this object properly.
+     */
+    public destroy(): void {
+        this.stopListeningForDOMEvents();
+        this.gauge.destroy();
+    }
 
     /**
      * Perform gauge initialization.
@@ -223,7 +250,7 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
      */
     protected listenForDOMEvents() {
         // Listen to gauge element for attribute changes
-        // Convert all changed attribtues into a GenericOptions or subclass
+        // Convert all changed attributes into a GenericOptions or subclass
         // Update the gauge with the new options.
         this.domListener =
             Rx.DOM.fromMutationObserver(this.el.nativeElement, { attributes: true }).
@@ -255,7 +282,7 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
 
 
     /**
-     * Initalize the gauge with all options defined by attributes and
+     * Initialize the gauge with all options defined by attributes and
      * parent component options.
      */
     protected initGauge() {
