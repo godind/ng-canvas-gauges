@@ -1,10 +1,10 @@
 {
-  "name": "@biacsics/ng-canvas-gauges",
-  "version": "6.0.15",
+  "name": "@godind/ng-canvas-gauges",
+  "version": "6.1.1",
   "description": "Angular 15+ component wrapper for the canvas-gauges lib written by @Mikhus",
   "repository": {
     "type": "git",
-    "url": "https://github.com/biacsics/ng-canvas-gauges.git"
+    "url": "https://github.com/godind/ng-canvas-gauges"
   },
   "keywords": [
     "Angular",
@@ -14,8 +14,11 @@
     "Meter",
     "Speedometer"
   ],
-  "author": "markus.biacsics@gmail.com",
+  "author": "@Mikhus",
   "contributors": [
+    {
+      "name": "David Godin"
+    },
     {
       "name": "Markus Biacsics"
     }],

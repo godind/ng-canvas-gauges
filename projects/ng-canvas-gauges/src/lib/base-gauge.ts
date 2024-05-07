@@ -241,6 +241,10 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
         this.listenForDOMEvents();
 
         this.isInited = true;
+
+        if (this.preInitValue) {
+          this.value = this.preInitValue;
+      }
     }
 
 
@@ -287,9 +291,6 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
      */
     protected initGauge() {
         const options = this.options;
-        if (this.preInitValue) {
-            options.value = this.preInitValue;
-        }
 
         // init options.renderTo if needed
         if (!options.hasOwnProperty('renderTo') || !options.renderTo) {
