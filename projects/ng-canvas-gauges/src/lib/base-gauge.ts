@@ -24,7 +24,7 @@
 
 import { ViewChild, Input, NgZone, ElementRef, OnInit, AfterViewInit, Directive, OnDestroy } from '@angular/core';
 import * as CanvasGauges from 'canvas-gauges';
-import * as Rx from 'rx-dom-html';
+// import * as Rx from 'rx-dom-html';
 
 
 
@@ -44,288 +44,277 @@ const attributeName2PropertyName = (attrName: string) => toCamelCase(attrName);
  * T2 - Type of config options used by the particular gauge (RadialGaugeOptions, LinearGaugeOptions)
  */
 @Directive()
-export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends CanvasGauges.GenericOptions>
-    implements OnInit, AfterViewInit, OnDestroy {
+export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends CanvasGauges.GenericOptions> implements OnInit, AfterViewInit, OnDestroy {
 
-    /**
-     * Canvas element on the template used by the library to draw gauge element
-     */
-    @ViewChild('gauge', { static: true })
-    protected canvas: ElementRef;
+  /**
+   * Canvas element on the template used by the library to draw gauge element
+   */
+  @ViewChild('gauge', { static: true })
+  protected canvas: ElementRef;
 
-    /**
-     * A gauge instance responsible for rendering and updates on the canvas.
-     * Subclasses should initialize in their ngOnInit implementation.
-     */
-    protected gauge: T;
-
-
-    /**
-     * Flag indicating that OnViewInit life-cycle has completed
-     */
-    private isInited = false;
-
-    /**
-     * value property of gauge prior to component view initialization
-     */
-    private preInitValue: number;
-
-    /**
-     * options property of gauge prior to component view initialization
-     */
-    private preInitOptions: T2;
+  /**
+   * A gauge instance responsible for rendering and updates on the canvas.
+   * Subclasses should initialize in their ngOnInit implementation.
+   */
+  protected gauge: T;
 
 
-    /**
-     * Listen for attribute changes, i.e., options properties that are stored
-     * as attributes on this ElementRef
-     */
-    private domListener: MutationObserver;
+  /**
+   * Flag indicating that OnViewInit life-cycle has completed
+   */
+  private isInited = false;
+
+  /**
+   * value property of gauge prior to component view initialization
+   */
+  private preInitValue: number;
+
+  /**
+   * options property of gauge prior to component view initialization
+   */
+  private preInitOptions: T2;
 
 
-    /**
-     *
-     * @param el - reference to the element of the whole component, used to scrape options declared on the component itself
-     * @param zone - required to redraw gauge outside of Angular, due to animation lags caused by the overwritten function of the ngZone
-     */
-    constructor(private el: ElementRef, public zone: NgZone) {
+  /**
+   * Listen for attribute changes, i.e., options properties that are stored
+   * as attributes on this ElementRef
+   */
+  private domListener: MutationObserver;
+
+
+  /**
+   *
+   * @param el - reference to the element of the whole component, used to scrape options declared on the component itself
+   * @param zone - required to redraw gauge outside of Angular, due to animation lags caused by the overwritten function of the ngZone
+   */
+  constructor(private el: ElementRef, public zone: NgZone) {
+  }
+
+
+  /**
+   * Subclasses should instantiate the CanvasGauge object in the child component
+   */
+  abstract ngOnInit(): void;
+
+
+  /**
+   * Returns gauges properties as an options object.
+   * Option properties consist of the attribute-based properties and those
+   * explicitly set.
+   * @returns <T2>
+   */
+  public get options(): T2 {
+
+    const options = {} as T2;
+    options.renderTo = this.canvas.nativeElement;
+
+    // Map attribute-based options onto options.
+    // Requires converting kebab style attribute names to camelCase property names
+    for (const attr of this.el.nativeElement.attributes) {
+        const prop = attributeName2PropertyName(attr.name);
+        options[prop] = CanvasGauges.DomObserver.parse(attr.value);
     }
 
-
-    /**
-     * Subclasses should instantiate the CanvasGauge object in the child component
-     */
-    abstract ngOnInit(): void;
-
-
-    /**
-     * Returns gauges properties as an options object.
-     * Option properties consist of the attribute-based properties and those
-     * explicitly set.
-     * @returns <T2>
-     */
-    public get options(): T2 {
-
-        const options = {} as T2;
-        options.renderTo = this.canvas.nativeElement;
-
-        // Map attribute-based options onto options.
-        // Requires converting kebab style attribute names to camelCase property names
-        for (const attr of this.el.nativeElement.attributes) {
-            const prop = attributeName2PropertyName(attr.name);
-            options[prop] = CanvasGauges.DomObserver.parse(attr.value);
-        }
-
-        // merge preOptions with attribute-based properties
-        // tslint:disable-next-line:forin
-        for (const prop in this.preInitOptions) {
-            options[prop] = this.preInitOptions[prop];
-        }
-
-        // clear the preInitOptions as they have already been merged
-        // with the attribute-based properties
-        if (this.isInited) {
-            this.preInitOptions = null;
-        }
-
-        return options;
+    // merge preOptions with attribute-based properties
+    // tslint:disable-next-line:forin
+    for (const prop in this.preInitOptions) {
+        options[prop] = this.preInitOptions[prop];
     }
 
-
-    /**
-     * Assign gauge options at anytime in the lifecycle.
-     * @param newOptions - assign the style and size properties
-     */
-    @Input()
-    public set options(newOptions: T2) {
-
-        // cache newOptions as preInitOptions until gauge is ready
-        if (!this.isInited) {
-            this.preInitOptions = newOptions;
-            return;
-        }
-
-        this.update(newOptions);
+    // clear the preInitOptions as they have already been merged
+    // with the attribute-based properties
+    if (this.isInited) {
+        this.preInitOptions = null;
     }
 
+    return options;
+  }
 
-    /**
-     * Assign the value of the gauge visual indicator such as a needle or pointer
-     * @param newValue  the guage new value
-     */
-    @Input()
-    public set value(newValue: number) {
 
-        // case new gauge value as preInitValue until the gauge is ready
-        if (!this.isInited) {
-            this.preInitValue = newValue;
-            return;
-        }
-
-        this.zone.runOutsideAngular(() => {
-            this.gauge.value = newValue;
-        });
+  /**
+   * Assign gauge options at anytime in the lifecycle.
+   * @param newOptions - assign the style and size properties
+   */
+  @Input()
+  public set options(newOptions: T2) {
+    // cache newOptions as preInitOptions until gauge is ready
+    if (!this.isInited) {
+      this.preInitOptions = newOptions;
+      return;
     }
 
+    this.update(newOptions);
+  }
 
-    /**
-     * Update the gauge options. Do not use until after OnViewInit() before using.
-     *
-     * Special implementation note - options.properties are maintained as
-     * attribute name->value on this component's elementRef.  Thus this method
-     * maps each newOptions property onto the property's corresponding attribute.
-     * The attribute update triggers a DOM mutation event which  "this" listens for.
-     * See #listenForDOMEvents()
-     *
-     * @param newOptions  - the options to update the gauge
-     */
-    public update(newOptions: T2 | {}): void {
 
-        // map all options onto this element's attributes
-        // Then attribute changes will be detected and pushed to the gauge.update()
-        if (!newOptions) { return; }
-
-        // tslint:disable-next-line:forin
-        for (const prop in newOptions) {
-            const val = newOptions[prop].toString();
-
-            if (prop === 'value') {
-                // short circuit the value property update by calling
-                // the gauge.value api directly for efficient animated update
-                this.value = CanvasGauges.DomObserver.parse(val);
-            } else {
-                const attrName = toKebabCase(prop);
-                this.el.nativeElement.setAttribute(attrName, val);
-            }
-        }
+  /**
+   * Assign the value of the gauge visual indicator such as a needle or pointer
+   * @param newValue  the guage new value
+   */
+  @Input()
+  public set value(newValue: number) {
+    // case new gauge value as preInitValue until the gauge is ready
+    if (!this.isInited) {
+      this.preInitValue = newValue;
+      return;
     }
 
-
-    /**
-     * Perform cleanup here and provide a hook for subclasses to do their cleanup.
-     */
-    public ngOnDestroy() {
-        this.destroy();
-
-        // Call subclass cleanup
-        this.cleanup();
-    }
-
-    /**
-     * Subclasses should override this method to do their cleanup.
-     * Don't forget to call super.cleanup() if you override this method.
-     */
-    protected cleanup(): void {
-        // Subclass-specific cleanup goes here
-    }
+    this.zone.runOutsideAngular(() => {
+      this.gauge.value = newValue;
+    });
+  }
 
 
-    /**
-     * Stops listening for DOMEvents and performs destruction of this object properly.
-     */
-    public destroy(): void {
-        this.stopListeningForDOMEvents();
-        this.gauge.destroy();
-    }
+  /**
+   * Update the gauge options. Do not use until after OnViewInit() before using.
+   *
+   * Special implementation note - options.properties are maintained as
+   * attribute name->value on this component's elementRef.  Thus this method
+   * maps each newOptions property onto the property's corresponding attribute.
+   * The attribute update triggers a DOM mutation event which  "this" listens for.
+   * See #listenForDOMEvents()
+   *
+   * @param newOptions  - the options to update the gauge
+   */
+  public update(newOptions: T2 | {}): void {
+    // map all options onto this element's attributes
+    // Then attribute changes will be detected and pushed to the gauge.update()
+    if (!newOptions) { return; }
 
-    /**
-     * Perform gauge initialization.
-     * Subclasses that override this method must this super version
-     * for proper operation.
-     */
-    public ngAfterViewInit() {
+    // tslint:disable-next-line:forin
+    for (const prop in newOptions) {
+      const val = newOptions[prop].toString();
 
-        // initial update of gauge properties
-        this.initGauge();
-
-        this.listenForDOMEvents();
-
-        this.isInited = true;
-
-        if (this.preInitValue) {
-          this.value = this.preInitValue;
+      if (prop === 'value') {
+        // short circuit the value property update by calling
+        // the gauge.value api directly for efficient animated update
+        this.value = CanvasGauges.DomObserver.parse(val);
+      } else {
+        const attrName = toKebabCase(prop);
+        this.el.nativeElement.setAttribute(attrName, val);
       }
     }
+  }
 
 
-    /**
-     * Listen for attribute-change events that are created when updating
-     * the options of this gauge.
-     */
-    protected listenForDOMEvents() {
-        // Listen to gauge element for attribute changes
-        // Convert all changed attributes into a GenericOptions or subclass
-        // Update the gauge with the new options.
-        this.domListener =
-            Rx.DOM.fromMutationObserver(this.el.nativeElement, { attributes: true }).
-                subscribe(changes => {
-                    const newOptions = {} as T2;
-                    changes.forEach(change => {
-                        if ('attributes' === change.type) {
-                            // console.log('DOM, change', change.attributeName);
-                            newOptions[attributeName2PropertyName(change.attributeName)] =
-                                CanvasGauges.DomObserver.parse(
-                                    this.el.nativeElement.getAttribute(change.attributeName));
-                        }
-                    });
+  /**
+   * Perform cleanup here and provide a hook for subclasses to do their cleanup.
+   */
+  public ngOnDestroy() {
+    this.destroy();
 
-                    this.basicUpdate(newOptions);
-                });
+    // Call subclass cleanup
+    this.cleanup();
+  }
+
+  /**
+   * Subclasses should override this method to do their cleanup.
+   * Don't forget to call super.cleanup() if you override this method.
+   */
+  protected cleanup(): void {
+    // Subclass-specific cleanup goes here
+  }
+
+
+  /**
+   * Stops listening for DOMEvents and performs destruction of this object properly.
+   */
+  public destroy(): void {
+    this.stopListeningForDOMEvents();
+    this.gauge.destroy();
+    console.log('Gauge destroyed');
+  }
+
+  /**
+   * Perform gauge initialization.
+   * Subclasses that override this method must this super version
+   * for proper operation.
+   */
+  public ngAfterViewInit() {
+    // initial update of gauge properties
+    this.initGauge();
+    this.listenForDOMEvents();
+    this.isInited = true;
+    if (this.preInitValue) {
+      this.value = this.preInitValue;
+    }
+  }
+
+
+  /**
+   * Listen for attribute-change events that are created when updating
+   * the options of this gauge.
+   */
+  protected listenForDOMEvents() {
+    // Listen to gauge element for attribute changes
+    // Convert all changed attributes into a GenericOptions or subclass
+    // Update the gauge with the new options.
+    this.domListener = new MutationObserver((changes) => {
+      const newOptions = {} as T2;
+      changes.forEach((change) => {
+        if ('attributes' === change.type) {
+          console.log('DOM, change', change.attributeName);
+          newOptions[attributeName2PropertyName(change.attributeName)] =
+            CanvasGauges.DomObserver.parse(
+              this.el.nativeElement.getAttribute(change.attributeName)
+            );
+        }
+        }
+      );
+
+      this.basicUpdate(newOptions);
+    });
+    this.domListener.observe(this.el.nativeElement, { attributes: true });
+  }
+
+
+  /**
+   * Discontinue listening for attribute change events.
+   */
+  protected stopListeningForDOMEvents() {
+    if (this.domListener) {
+      this.domListener.disconnect();
+      this.domListener = null;
+      console.log('DOM, stopListeningForDOMEvents');
+    }
+  }
+
+
+  /**
+   * Initialize the gauge with all options defined by attributes and
+   * parent component options.
+   */
+  protected initGauge() {
+    const options = this.options;
+
+    // init options.renderTo if needed
+    if (!options.hasOwnProperty('renderTo') || !options.renderTo) {
+      options.renderTo = this.canvas.nativeElement;
     }
 
+    this.basicUpdate(options);
+  }
 
-    /**
-     * Discontinue listening for attribute change events.
-     */
-    protected stopListeningForDOMEvents() {
-        if (this.domListener) {
-            this.domListener.disconnect();
-            this.domListener = null;
-        }
+
+  /**
+   * Performs the gauge update using the current options
+   * @param options  The options for the gauge
+   */
+  protected basicUpdate(options: T2) {
+    // treat the value property special and update it through the
+    // value getter.
+    if (typeof options.value === 'number') {
+      // use gauge api directly for most efficient update method
+      this.value = options.value;
+
+      // filter value property from options to avoid redundant
+      // processing by gauge
+      delete options.value;
     }
 
-
-    /**
-     * Initialize the gauge with all options defined by attributes and
-     * parent component options.
-     */
-    protected initGauge() {
-        const options = this.options;
-
-        // init options.renderTo if needed
-        if (!options.hasOwnProperty('renderTo') || !options.renderTo) {
-            options.renderTo = this.canvas.nativeElement;
-        }
-
-        this.basicUpdate(options);
+    // do nothing if no option properties to update
+    if (Object.keys(options).length) {
+      this.gauge.update(options);
     }
-
-
-    /**
-     * Performs the gauge update using the current options
-     * @param options  The options for the guage
-     */
-    protected basicUpdate(options: T2) {
-
-        // treat the value property special and update it through the
-        // value getter.
-        if (typeof options.value === 'number') {
-
-            // use gauge api directly for most efficient update method
-            this.value = options.value;
-
-            // filter value property from options to avoid redundant
-            // processing by gauge
-            delete options.value;
-        }
-
-        // do nothing if no option properties to update
-        if (Object.keys(options).length) {
-            this.gauge.update(options);
-        }
-    }
-
+  }
 }
-
-
-
