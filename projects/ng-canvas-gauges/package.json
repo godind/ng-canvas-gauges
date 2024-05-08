@@ -28,8 +28,7 @@
     "@angular/common": ">=9.0.0",
     "@angular/core": ">=9.0.0",
     "@types/canvas-gauges": "^2.1.4",
-    "canvas-gauges": "^2.1.7",
-    "rx-dom-html": "^7.0.3"
+    "canvas-gauges": "^2.1.7"
   },
   "dependencies": {
 
