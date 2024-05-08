@@ -221,7 +221,6 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
   public destroy(): void {
     this.stopListeningForDOMEvents();
     this.gauge.destroy();
-    console.log('Gauge destroyed');
   }
 
   /**
@@ -252,7 +251,7 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
       const newOptions = {} as T2;
       changes.forEach((change) => {
         if ('attributes' === change.type) {
-          console.log('DOM, change', change.attributeName);
+          // console.log('DOM, change', change.attributeName);
           newOptions[attributeName2PropertyName(change.attributeName)] =
             CanvasGauges.DomObserver.parse(
               this.el.nativeElement.getAttribute(change.attributeName)
@@ -274,7 +273,6 @@ export abstract class BaseGauge<T extends CanvasGauges.BaseGauge, T2 extends Can
     if (this.domListener) {
       this.domListener.disconnect();
       this.domListener = null;
-      console.log('DOM, stopListeningForDOMEvents');
     }
   }
 
