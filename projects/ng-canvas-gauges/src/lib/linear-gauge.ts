@@ -24,9 +24,9 @@
 
 import {Component, NgZone, ElementRef, OnInit} from '@angular/core';
 import {BaseGauge} from './base-gauge';
-import * as CanvasGauges from 'canvas-gauges';
+import * as CanvasGauges from '@godind/canvas-gauges';
 
-export { LinearGaugeOptions } from 'canvas-gauges';
+export { LinearGaugeOptions } from '@godind/canvas-gauges';
 
 /**
  * Implements Linear Gauge from the original library

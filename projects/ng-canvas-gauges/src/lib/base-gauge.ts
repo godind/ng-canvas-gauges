@@ -23,7 +23,7 @@
  */
 
 import { ViewChild, Input, NgZone, ElementRef, OnInit, AfterViewInit, Directive, OnDestroy } from '@angular/core';
-import * as CanvasGauges from 'canvas-gauges';
+import * as CanvasGauges from '@godind/canvas-gauges';
 
 
 

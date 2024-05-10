@@ -24,9 +24,9 @@
 
 import { Component, NgZone, ElementRef, OnInit } from '@angular/core';
 import { BaseGauge } from './base-gauge';
-import * as CanvasGauges from 'canvas-gauges';
+import * as CanvasGauges from '@godind/canvas-gauges';
 
-export { RadialGaugeOptions } from 'canvas-gauges';
+export { RadialGaugeOptions } from '@godind/canvas-gauges';
 
 /**
  * Implements Radial Gauge from the original library

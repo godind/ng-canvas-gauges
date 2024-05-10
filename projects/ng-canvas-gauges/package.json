@@ -1,10 +1,10 @@
 {
-  "name": "@biacsics/ng-canvas-gauges",
-  "version": "6.0.14",
-  "description": "Angular 15+ component wrapper for the canvas-gauges lib written by @Mikhus",
+  "name": "@godind/ng-canvas-gauges",
+  "version": "6.1.8",
+  "description": "Angular 16+ component wrapper for the canvas-gauges lib written by @Mikhus",
   "repository": {
     "type": "git",
-    "url": "https://github.com/biacsics/ng-canvas-gauges.git"
+    "url": "https://github.com/godind/ng-canvas-gauges.git"
   },
   "keywords": [
     "Angular",
@@ -28,7 +28,7 @@
     "@angular/common": ">=9.0.0",
     "@angular/core": ">=9.0.0",
     "@types/canvas-gauges": "^2.1.4",
-    "canvas-gauges": "^2.1.7"
+    "@godind/canvas-gauges": "^2.1.25"
   },
   "dependencies": {
 
