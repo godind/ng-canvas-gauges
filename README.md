@@ -1,4 +1,4 @@
-### Angular 9+ component wrapper for [@Mikhus'](https://github.com/Mikhus/canvas-gauges) canvas-gauges library.
+### Angular 16+ component wrapper for @godind/canvas-gauge - a fork from [@Mikhus'](https://github.com/Mikhus/canvas-gauges) canvas-gauges library with bug fixes.
 ### a fork from https://github.com/MeetmeLeave/ng-canvas-gauges to support angular 9.x
 ### Getting Started
 1. Install the package in your angular 9 or greater app
