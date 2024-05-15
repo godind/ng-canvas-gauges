@@ -1,6 +1,6 @@
 {
   "name": "@godind/ng-canvas-gauges",
-  "version": "6.1.8",
+  "version": "6.2.0",
   "description": "Angular 15+ component wrapper for the canvas-gauges lib written by @Mikhus",
   "scripts": {
     "build:example": "ng build example",
