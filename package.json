@@ -1,6 +1,6 @@
 {
   "name": "@godind/ng-canvas-gauges",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "Angular 15+ component wrapper for the canvas-gauges lib written by @Mikhus",
   "scripts": {
     "build:example": "ng build example",
@@ -10,6 +10,7 @@
     "build:pack": "cd dist/ng-canvas-gauges && npm pack",
     "build:package": "npm run build:lib && npm run build:pack",
     "postbuild:package": "mkdir lib && cp dist/ng-canvas-gauges/godind-ng-canvas-gauges-*.tgz lib",
+
     "clean": "rm -rf dist/ lib/",
     "start": "ng serve"
   },
@@ -53,7 +54,7 @@
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0",
-    "@godind/canvas-gauges": "2.2.0",
+    "@godind/canvas-gauges": "2.2.1",
     "core-js": "^3.6.5",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",

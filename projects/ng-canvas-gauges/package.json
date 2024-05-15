@@ -1,6 +1,6 @@
 {
   "name": "@godind/ng-canvas-gauges",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "Angular 16+ component wrapper for the canvas-gauges lib written by @Mikhus",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "@angular/common": ">=9.0.0",
     "@angular/core": ">=9.0.0",
     "@types/canvas-gauges": "^2.1.4",
-    "@godind/canvas-gauges": "2.2.0"
+    "@godind/canvas-gauges": "2.2.1"
   },
   "dependencies": {
 
