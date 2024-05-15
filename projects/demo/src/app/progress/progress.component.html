@@ -1,17 +1,17 @@
-<!-- 
-    Demonstrates using a radial gauge as a progress indicator. 
+<!--
+    Demonstrates using a radial gauge as a progress indicator.
     The gauge value is bound to the component's value$ observable property.
 -->
 <radial-gauge #progress_gauge
 
     [value]="(value$ | async)"
- 
+
     width="150"
     height="150"
     units="Loading"
     min-value="0"
     max-value="100"
-    
+
     color-plate="transparent"
 
     ticks-angle="315"
@@ -36,7 +36,7 @@
     bar-width="30"
     bar-shadow="#f00"
     bar-stroke-width="0"
-    
+
     color-bar="transparent"
     color-major-ticks="transparent"
 
@@ -56,7 +56,7 @@
 
     needle="false"
     animation-rule="linear"
-    animation-duration="200"
+    animation-duration="100"
 
 
     class="gauge"

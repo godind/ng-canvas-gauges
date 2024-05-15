@@ -28,7 +28,7 @@
     "@angular/common": ">=9.0.0",
     "@angular/core": ">=9.0.0",
     "@types/canvas-gauges": "^2.1.4",
-    "@godind/canvas-gauges": "^2.1.25"
+    "@godind/canvas-gauges": "2.2.0"
   },
   "dependencies": {
 

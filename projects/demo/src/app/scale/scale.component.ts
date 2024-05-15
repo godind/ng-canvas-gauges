@@ -32,13 +32,15 @@ export class ScaleComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.value$ = interval(2000).pipe(
-      map(() => Math.random() * 10)
-    );
+
   }
 
   ngAfterViewInit() {
     this.radialGauge.update(this.scaleGaugeOptions);
+
+    this.value$ = interval(500).pipe(
+      map(() => Math.random() * 10)
+    );
 
     // timer that updates plate.color property
     interval(100).subscribe( t => this.updateCoverPlateColor() );
@@ -66,24 +68,24 @@ export class ScaleComponent implements OnInit, AfterViewInit {
 
   private initOptions() {
     this.scaleGaugeOptions = {
-        title: 'Scale',
-        width: '300',
-        height: '300',
-        units: 'Lbs',
-        minValue: '0',
-        maxValue: '10',
-        majorTicks: '[0,1,2,3,4,5,6,7,8,9,0]',
-        minorTicks: '2',
-        strokeTicks: 'true',
-        ticksAngle: '360',
-        startAngle: '180',
-        valueBox: 'true',
-        animationRule: 'bounce',
-        animationDuration: '500',
-        colorPlate: 'rgba(200,50,50,1)',
-        highlights: '[]'
-  };
-}
+      title: 'Scale',
+      width: '300',
+      height: '300',
+      units: 'Lbs',
+      minValue: '0',
+      maxValue: '10',
+      majorTicks: '[0,1,2,3,4,5,6,7,8,9,0]',
+      minorTicks: '2',
+      strokeTicks: 'true',
+      ticksAngle: '360',
+      startAngle: '180',
+      valueBox: 'true',
+      animationRule: 'bounce',
+      animationDuration: '500',
+      colorPlate: 'rgba(200,50,50,1)',
+      highlights: '[]'
+    };
+  }
 
 }
 

@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { interval, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { VechicleSimService } from '../vechiclesim.service';
 
 /**
@@ -12,14 +11,16 @@ import { VechicleSimService } from '../vechiclesim.service';
   selector: 'app-fuelgauge',
   templateUrl: './fuelgauge.component.html'
 })
-export class FuelgaugeComponent implements OnInit {
+export class FuelgaugeComponent implements OnInit, AfterViewInit {
 
   public value$: Observable<number>;
 
   constructor(private simService: VechicleSimService) { }
 
   ngOnInit() {
-    this.value$ = this.simService.fuel$;
   }
 
+  ngAfterViewInit() {
+    this.value$ = this.simService.fuel$;
+  }
 }

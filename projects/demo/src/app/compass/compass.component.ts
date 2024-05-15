@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { VechicleSimService } from '../vechiclesim.service';
 
@@ -10,7 +10,7 @@ import { VechicleSimService } from '../vechiclesim.service';
   selector: 'app-compass',
   templateUrl: './compass.component.html'
 })
-export class CompassComponent implements OnInit {
+export class CompassComponent implements OnInit, AfterViewInit {
 
   public value$: Observable<number>;
 
@@ -18,6 +18,10 @@ export class CompassComponent implements OnInit {
   }
 
   ngOnInit() {
+
+  }
+
+  ngAfterViewInit() {
     this.value$ = this.simService.speed$;
   }
 

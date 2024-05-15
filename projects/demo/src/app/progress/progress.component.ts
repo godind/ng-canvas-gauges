@@ -28,8 +28,8 @@ export class ProgressComponent implements OnInit, AfterViewInit {
     this.radialGauge.update({ colorBarProgress: 'rgba(0,200,200,.75)' });
 
     // update both the gauge value and valueText every 200 ms.
-    this.value$ = interval(200).pipe(
-      map(i => i % 100),
+    this.value$ = interval(100).pipe(
+      map(i => i % 101), // Limit the numbers to a range from 0 to 100
       tap(i => this.radialGauge.update( { valueText: i } ))
     );
   }

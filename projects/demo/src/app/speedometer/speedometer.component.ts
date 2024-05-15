@@ -21,10 +21,11 @@ export class SpeedometerComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.value$ = this.simService.speed$;
+
   }
 
   ngAfterViewInit() {
+    this.value$ = this.simService.speed$;
   }
 
 }

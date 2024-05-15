@@ -21,7 +21,7 @@ export class VechicleSimService {
 
   public get speed$() {
     if (!this._speed$) {
-      this._speed$ = interval(750).pipe(
+      this._speed$ = interval(250).pipe(
         map(() => Math.random() * 220)
       );
       console.log('speed init');
@@ -31,7 +31,7 @@ export class VechicleSimService {
 
   public get rpm$() {
     if (!this._rpm$) {
-      this._rpm$ = interval(1000).pipe(
+      this._rpm$ = interval(250).pipe(
         map(() => Math.random() * 12000)
       );
     }
@@ -40,8 +40,8 @@ export class VechicleSimService {
 
   public get fuel$() {
     if (!this._fuel$) {
-      this._fuel$ = interval(500).pipe(
-      map( (i) => 100 - i % 100)
+      this._fuel$ = interval(100).pipe(
+      map( (i) => 100 - i % 101)
     );
     }
     return this._fuel$;
@@ -49,7 +49,7 @@ export class VechicleSimService {
 
   public get compass$() {
     if (!this._compass$) {
-      this._compass$ = interval(2000).pipe(
+      this._compass$ = interval(250).pipe(
       map( (i) => Math.random() * 360)
     );
     }
